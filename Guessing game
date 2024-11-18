@@ -1,0 +1,35 @@
+import streamlit as st
+import random
+
+# Set the range for the random number
+LOWER_LIMIT = 1
+UPPER_LIMIT = 100
+
+# Initialize session state variables
+if 'number_to_guess' not in st.session_state:
+    st.session_state.number_to_guess = random.randint(LOWER_LIMIT, UPPER_LIMIT)
+    st.session_state.attempts = 0
+
+# Title and instructions
+st.title("🔢 Number Guessing Game")
+st.write(f"Guess the number between {LOWER_LIMIT} and {UPPER_LIMIT}!")
+
+# Input from user
+user_guess = st.number_input("Enter your guess:", min_value=LOWER_LIMIT, max_value=UPPER_LIMIT, step=1)
+guess_button = st.button("Guess")
+
+# Game logic
+if guess_button:
+    st.session_state.attempts += 1
+    if user_guess < st.session_state.number_to_guess:
+        st.warning("Too low! Try again.")
+    elif user_guess > st.session_state.number_to_guess:
+        st.warning("Too high! Try again.")
+    else:
+        st.success(f"Congratulations! You guessed it right in {st.session_state.attempts} attempts.")
+        st.balloons()
+
+        # Reset the game
+        if st.button("Play Again"):
+            st.session_state.number_to_guess = random.randint(LOWER_LIMIT, UPPER_LIMIT)
+            st.session_state.attempts = 0
